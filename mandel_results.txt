@@ -1,0 +1,174 @@
+[2012.05.13]
+
+
+   mandel_test.gcc_O3.exe
+             7,540 bytes in 1 plain files.
+
+   mandel_test.gcc_O0.exe
+             9,055 bytes in 1 plain files.
+
+   mandel_test2.gcc_O3.exe
+             9,229 bytes in 1 plain files.
+
+   mandel_test.ocamlO3.exe
+            15,504 bytes in 1 plain files.
+
+   mandel_test.icc_O3.exe
+            73,792 bytes in 1 plain files.
+
+   mandel_test.icc_O0.exe
+            75,741 bytes in 1 plain files.
+
+   mandel_test.ocaml.exe
+           180,324 bytes in 1 plain files.
+
+   mandel_test.icc_fast.exe
+           867,373 bytes in 1 plain files.
+
+   mandel_test.viaC_O2.exe
+           974,210 bytes in 1 plain files.
+
+   mandel_test.fasm_O2.exe
+         1,132,964 bytes in 1 plain files.
+
+   mandel_test.llvm_O2.exe
+         1,133,454 bytes in 1 plain files.
+
+
+FYI: Chez compiles the file into a 2.7K .so file.
+
+
+----------------------------------------------------------------------------------------------------
+C++:
+
+[rrnewton@slate ~/monad-par/examples/temp] (master)$ time ./mandel_test.gcc_O0.exe 
+5000000
+
+real	0m0.302s
+
+[rrnewton@granite ~/monad-par/examples/temp] (master)$ time ./mandel_test.gcc_O3.exe 
+5000000
+
+real	0m0.110s
+user	0m0.108s
+sys	0m0.001s
+
+
+
+# Here's the same but with an actual tail call:
+[rrnewton@slate ~/monad-par/examples/temp] (master)$ time ./mandel_test2.gcc_O3.exe 
+5000000
+
+real	0m0.116s
+user	0m0.113s
+
+
+----------------------------------------------------------------------------------------------------
+-- HASKELL:
+
+[rrnewton@granite ~/monad-par/examples/temp] (master)$ time ./mandel_test.fasm_O2.exe 
+5000000
+
+real	0m0.925s
+user	0m0.920s
+sys	0m0.003s
+[rrnewton@granite ~/monad-par/examples/temp] (master)$ time ./mandel_test.fasm_O2.exe 
+5000000
+
+real	0m0.921s
+user	0m0.915s
+sys	0m0.003s
+
+[rrnewton@slate ~/monad-par/examples/temp] (master)$ time ./mandel_test.llvm_O2.exe 
+5000000
+
+real	0m0.931s
+user	0m0.927s
+sys	0m0.002s
+
+GHC 7.0.4 
+
+[rrnewton@slate ~/monad-par/examples/temp] (master)$ time ./mandel_test.viaC_O2.exe 
+5000000
+
+real	0m0.684s
+user	0m0.679s
+
+Here's one -s output from the fasm version:
+       1,280,052,088 bytes allocated in the heap
+	     105,400 bytes copied during GC
+	      28,600 bytes maximum residency (1 sample(s))
+	      19,552 bytes maximum slop
+		   1 MB total memory in use (0 MB lost due to fragmentation)
+
+					Tot time (elapsed)  Avg pause  Max pause
+      Gen  0      2441 colls,     0 par    0.00s    0.01s     0.0000s    0.0000s
+      Gen  1         1 colls,     0 par    0.00s    0.00s     0.0002s    0.0002s
+
+      INIT    time    0.00s  (  0.00s elapsed)
+      MUT     time    0.92s  (  0.91s elapsed)
+      GC      time    0.00s  (  0.01s elapsed)
+      EXIT    time    0.00s  (  0.00s elapsed)
+      Total   time    0.92s  (  0.92s elapsed)
+
+      %GC     time       0.3%  (0.7% elapsed)
+
+      Alloc rate    1,394,601,898 bytes per MUT second
+
+      Productivity  99.7% of total user, 99.6% of total elapsed
+
+
+----------------------------------------------------------------------------------------------------
+
+CHEZ 8.2:
+> (begin (optimize-level 2) (load "mandel_test.ss"))
+> (time (main))
+(time (main))
+    123 collections
+    289 ms elapsed cpu time, including 6 ms collecting
+    289 ms elapsed real time, including 8 ms collecting
+    1040031392 bytes allocated, including 1040400272 bytes reclaimed
+5000000
+> (time (main2))
+(time (main2))
+    123 collections
+    291 ms elapsed cpu time, including 7 ms collecting
+    291 ms elapsed real time, including 6 ms collecting
+    1040031360 bytes allocated, including 1038708240 bytes reclaimed
+5000000
+
+
+CHEZ 8.4:
+> (time (main))
+(time (main))
+    124 collections
+    284 ms elapsed cpu time, including 10 ms collecting
+    284 ms elapsed real time, including 11 ms collecting
+    1040031584 bytes allocated, including 1044663968 bytes reclaimed
+5000000
+> (time (main2))
+(time (main2))
+    123 collections
+    285 ms elapsed cpu time, including 8 ms collecting
+    286 ms elapsed real time, including 11 ms collecting
+    1040031360 bytes allocated, including 1036198000 bytes reclaimed
+
+
+RACKET, default opt settings: 
+> (time (main))
+cpu time: 1639 real time: 1637 gc time: 72
+
+
+----------------------------------------------------------------------------------------------------
+ML variants:
+
+[rrnewton@slate ~/monad-par/examples/temp] (master)$ time ./mandel_test.ocaml.exe 
+Running mandel: 5000000
+
+real	0m0.166s
+
+
+
+----------------------------------------------------------------------------------------------------
+Python:
+
