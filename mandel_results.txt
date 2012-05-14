@@ -118,6 +118,35 @@ Here's one -s output from the fasm version:
 
       Productivity  99.7% of total user, 99.6% of total elapsed
 
+Here's the tidy core, which looks pretty good.  The problem is likely
+inside "magnitude" itself.
+
+     Main.$wloop =
+       \ (ww_s1Sa :: GHC.Prim.Int#)
+	 (ww1_s1Sg :: GHC.Prim.Double#)
+	 (ww2_s1Sk :: GHC.Prim.Double#) ->
+	 case ww_s1Sa of wild_XI {
+	   __DEFAULT ->
+	     case Data.Complex.$wmagnitude ww1_s1Sg ww2_s1Sk
+	     of _ { GHC.Types.D# x_aAf ->
+	     case GHC.Prim.>=## x_aAf 2.0 of _ {
+	       GHC.Types.False ->
+		 Main.$wloop
+		   (GHC.Prim.+# wild_XI 1)
+		   (GHC.Prim.+##
+		      (GHC.Prim.-##
+			 (GHC.Prim.*## ww1_s1Sg ww1_s1Sg) (GHC.Prim.*## ww2_s1Sk ww2_s1Sk))
+		      0.1)
+		   (GHC.Prim.+##
+		      (GHC.Prim.+##
+			 (GHC.Prim.*## ww1_s1Sg ww2_s1Sk) (GHC.Prim.*## ww2_s1Sk ww1_s1Sg))
+		      0.1);
+	       GHC.Types.True -> wild_XI
+	     }
+	     };
+	   5000000 -> 5000000
+	 }
+     end Rec }
 
 ----------------------------------------------------------------------------------------------------
 

@@ -14,6 +14,8 @@ gcc:  mandel_test.gcc_O3.exe
 ghc1: mandel_test.fasm_O2.exe
 ghc2: mandel_test.llvm_O2.exe
 
+ghc3: mandel_test2.llvm_O2.exe
+
 #================================================================================
 
 mandel_test.gcc_O3.exe: mandel_test.cpp
@@ -33,6 +35,8 @@ mandel_test.fasm_O0.exe: mandel_test.hs
 mandel_test.llvm_O2.exe: mandel_test.hs
 	ghc -O2 -fllvm --make $^ -o $@ -fforce-recomp
 
+mandel_test2.llvm_O2.exe: mandel_test2.hs
+	ghc -O2 -fllvm --make $^ -o $@ -fforce-recomp
 
 #================================================================================
 
