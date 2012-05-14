@@ -1,5 +1,9 @@
 [2012.05.13]
 
+This information is tabulated here:
+  https://docs.google.com/spreadsheet/ccc?key=0AvzAHqQmHo87dHU0T0lCb1I4MFJmM2s4RnNlamJlNkE
+
+----------------------------------------------------------------------------------------------------
 
    mandel_test.gcc_O3.exe
              7,540 bytes in 1 plain files.
@@ -9,9 +13,6 @@
 
    mandel_test2.gcc_O3.exe
              9,229 bytes in 1 plain files.
-
-   mandel_test.ocamlO3.exe
-            15,504 bytes in 1 plain files.
 
    mandel_test.icc_O3.exe
             73,792 bytes in 1 plain files.
@@ -171,4 +172,10 @@ real	0m0.166s
 
 ----------------------------------------------------------------------------------------------------
 Python:
+
+[rrnewton@slate ~/monad-par/examples/temp] (master)$ time python mandel_test.py 
+5000000
+
+real	0m1.973s
+user	0m1.964s
 
